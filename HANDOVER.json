@@ -66,14 +66,14 @@
     {
       "id": "TOOL-001",
       "priority": "medium",
-      "status": "open",
+      "status": "in-progress",
       "description": "The rebuilt repo-ctl may not provide the original discovery engine or --plan functionality.",
       "next_action": "Confirm the intended command set and add automated tests."
     },
     {
       "id": "RESTORE-001",
       "priority": "high",
-      "status": "open",
+      "status": "closed",
       "description": "A fresh-clone recovery test has not yet been recorded.",
       "next_action": "Clone origin/main into a temporary directory and run the doctor audit."
     }
@@ -167,7 +167,6 @@
     "Identify and fix the invalid grep range.",
     "Confirm whether repo-ctl requires discovery and --plan support.",
     "Create and verify a Git bundle backup.",
-    "Perform a fresh-clone recovery test.",
     "Add automated tests for manifest parsing and synchronization."
   ],
   "retention": {
