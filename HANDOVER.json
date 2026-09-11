@@ -1,9 +1,182 @@
 {
-  "repository_hash": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  "git_commit": "a7f3c12d9e8b4a5c6d7e8f9a0b1c2d3e4f5a6b7c",
-  "target_ids": [
-    "network_core"
+  "handover_version": "1.1",
+  "generated_at": "2026-09-11",
+  "operator": "bilbywilby",
+  "assistant": "Carter",
+  "repository": {
+    "path": "/home/droid/handover",
+    "remote": "https://github.com/bilbywilby/handover.git",
+    "branch": "main",
+    "upstream": "origin/main",
+    "source_commit": "2c9f3fb",
+    "current_commit": "1293317",
+    "sync_status": "pushed to origin/main"
+  },
+  "recovery_summary": {
+    "reason": "Untracked operational files were removed by git clean -fd.",
+    "result": "Operational tooling was rebuilt, committed, and pushed.",
+    "critical_warning": "Do not run git clean -fd or git reset --hard without a verified backup."
+  },
+  "current_state": {
+    "repo_ctl": {
+      "path": "scripts/repo-ctl",
+      "present": true,
+      "executable": true,
+      "implementation": "Bash recovery wrapper",
+      "doctor_status": "passed",
+      "manifest_target_count": 5
+    },
+    "manifest": {
+      "path": "manifest.json",
+      "top_level_type": "list",
+      "entry_count": 5,
+      "schema_version": "observed-list-format"
+    },
+    "synchronization": {
+      "script": "sync_and_monitor.sh",
+      "variable_expansion_fixed": true,
+      "remote_push_completed": true
+    }
+  },
+  "environment": {
+    "repository_directory": "/home/droid/handover",
+    "required_tools": [
+      "bash",
+      "git",
+      "python3",
+      "sha256sum"
+    ],
+    "required_environment_variables": [],
+    "secrets_stored_in_file": false
+  },
+  "git_configuration": {
+    "core_hookspath": "/home/droid/.config/git-hooks",
+    "remote_verification_command": "git ls-remote --exit-code origin refs/heads/main",
+    "active_hook_audit_required": true
+  },
+  "known_issues": [
+    {
+      "id": "HOOK-001",
+      "priority": "high",
+      "status": "open",
+      "description": "grep: Invalid range end appears during synchronization or related Git operations.",
+      "suspected_source": "/home/droid/.config/git-hooks",
+      "next_action": "Inspect executable global Git hooks for malformed bracket expressions."
+    },
+    {
+      "id": "TOOL-001",
+      "priority": "medium",
+      "status": "open",
+      "description": "The rebuilt repo-ctl may not provide the original discovery engine or --plan functionality.",
+      "next_action": "Confirm the intended command set and add automated tests."
+    },
+    {
+      "id": "RESTORE-001",
+      "priority": "high",
+      "status": "open",
+      "description": "A fresh-clone recovery test has not yet been recorded.",
+      "next_action": "Clone origin/main into a temporary directory and run the doctor audit."
+    }
   ],
-  "action": "sync",
-  "apply_explicit": true
+  "verification": {
+    "last_verified_at": "2026-09-11",
+    "successful_checks": [
+      {
+        "command": "./scripts/repo-ctl doctor",
+        "expected": "exit code 0 and manifest target count 5"
+      },
+      {
+        "command": "git push -u origin main",
+        "expected": "main pushed successfully to origin/main"
+      }
+    ],
+    "required_checks": [
+      {
+        "command": "git status --short",
+        "expected": "only documented changes"
+      },
+      {
+        "command": "git ls-remote --exit-code origin refs/heads/main",
+        "expected": "remote main is reachable"
+      },
+      {
+        "command": "git bundle verify backups/handover.bundle",
+        "expected": "bundle is valid"
+      }
+    ]
+  },
+  "integrity": {
+    "algorithm": "sha256",
+    "files_to_hash": [
+      "HANDOVER.json",
+      "manifest.json",
+      "scripts/repo-ctl",
+      "sync_and_monitor.sh"
+    ],
+    "generate_command": "sha256sum HANDOVER.json manifest.json scripts/repo-ctl sync_and_monitor.sh"
+  },
+  "backup_policy": {
+    "required_before_destructive_operations": true,
+    "preserve": [
+      ".git",
+      "HANDOVER.json",
+      "manifest.json",
+      "scripts/",
+      "backups/",
+      "snapshots/",
+      ".audit_logs/"
+    ],
+    "recommended_bundle_command": "mkdir -p backups && git bundle create backups/handover.bundle --all && sha256sum backups/handover.bundle > backups/handover.bundle.sha256"
+  },
+  "recovery_procedure": [
+    "Verify the working directory and remote URL.",
+    "Create a Git bundle and checksum before destructive actions.",
+    "Fetch origin/main.",
+    "Inspect the remote tree with git ls-tree -r origin/main.",
+    "Reset only after confirming the remote contains required tooling.",
+    "Run ./scripts/repo-ctl doctor.",
+    "Run the fresh-clone recovery test.",
+    "Commit and push only after validation passes."
+  ],
+  "destructive_operations": [
+    "git clean -fd",
+    "git reset --hard",
+    "rm -rf",
+    "factory reset",
+    "clean install"
+  ],
+  "test_matrix": [
+    {
+      "name": "repo doctor",
+      "command": "./scripts/repo-ctl doctor",
+      "expected_exit_code": 0
+    },
+    {
+      "name": "remote reachability",
+      "command": "git ls-remote --exit-code origin refs/heads/main",
+      "expected_exit_code": 0
+    },
+    {
+      "name": "fresh clone",
+      "command": "git clone origin /tmp/handover-recovery-test",
+      "expected_exit_code": 0
+    }
+  ],
+  "pending_actions": [
+    "Audit executable files under /home/droid/.config/git-hooks.",
+    "Identify and fix the invalid grep range.",
+    "Confirm whether repo-ctl requires discovery and --plan support.",
+    "Create and verify a Git bundle backup.",
+    "Perform a fresh-clone recovery test.",
+    "Add automated tests for manifest parsing and synchronization."
+  ],
+  "retention": {
+    "audit_logs_days": 90,
+    "recovery_bundles_days": 365,
+    "regenerable_paths": [
+      "__pycache__/",
+      "logs/",
+      ".completion/"
+    ]
+  }
 }
