@@ -58,7 +58,7 @@
     {
       "id": "HOOK-001",
       "priority": "high",
-      "status": "open",
+      "status": "closed",
       "description": "grep: Invalid range end appears during synchronization or related Git operations.",
       "suspected_source": "/home/droid/.config/git-hooks",
       "next_action": "Inspect executable global Git hooks for malformed bracket expressions."
