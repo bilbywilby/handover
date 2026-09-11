@@ -12,7 +12,7 @@ log "Starting Handover Seal Process..."
 log "Generating HANDOVER.sha256..."
 # Find all files in tooling and the core scripts to include in the checksum
 FILES_TO_SEAL=$(find scripts/tooling -type f | sort)
-sha256sum HANDOVER.json manifest.json scripts/repo-ctl sync_and_monitor.sh monitor_remote.sh remote_check.sh $FILES_TO_SEAL > HANDOVER.sha256
+sha256sum HANDOVER.json scripts/repo-ctl sync_and_monitor.sh monitor_remote.sh remote_check.sh $FILES_TO_SEAL > HANDOVER.sha256
 
 log "Synchronizing Git index..."
 git add HANDOVER.sha256 sync_and_monitor.sh monitor_remote.sh remote_check.sh .gitignore scripts/tooling/
