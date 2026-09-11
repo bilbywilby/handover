@@ -13,8 +13,8 @@
     "last_known_git_status": "clean before final permission hardening",
     "last_known_audit": "passed",
     "last_known_manifest_state": "manifest.json and manifest.jsonl agreed before subsequent failed recovery attempts",
-    "current_state": "requires verification",
-    "known_risk": "Repository permissions may have been re-hardened to 555/444, potentially making the repository root and working-tree files unwritable."
+    "current_state": "verified clean",
+    "known_risk": "none \u2014 permissions restored (dirs 755, files 644, tools 755); snapshots hardened to 555/444 only"
   },
   "repeated_mistakes": [
     {
@@ -130,6 +130,10 @@
     {
       "timestamp": "2026-09-11T09:00:00+00:00",
       "message": "Recovery script restored Git write access, but a subsequent hardening step and malformed M005 logging heredoc require renewed verification."
+    },
+    {
+      "timestamp": "2026-09-11T09:30:00+00:00",
+      "message": "State verified: tree clean at 31f876d, audit passed, ledger seal valid."
     }
   ],
   "operator_notes": [
