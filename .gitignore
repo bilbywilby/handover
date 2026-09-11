@@ -1,2 +1,3 @@
 *.bak
 *.invalid-*
+__pycache__/
