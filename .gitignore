@@ -37,10 +37,10 @@ build/**
 *_prod.yml
 
 # 6. Operational artifacts - never version these
-.opsec_recovery_repo/
+opsec_recovery_repo/
 .guardian_audit
 .guardian_check.py
-.backups/
+backups/
 
 # Handover backup/damage variants
 HANDOVER.json.bak
