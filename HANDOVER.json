@@ -1,0 +1,51 @@
+{
+  "version": 3,
+  "created_at": "2026-09-11T05:00:00Z",
+  "title": "handoverctl stabilized via git-backed gated deployment",
+  "summary": "Seven size-triggered paste corruptions this session. Proven causes: hollow-shell heredoc passing py_compile (grep def count was zero on disk), quoted tilde no-expansion, Path expanduser paren bug, format-coupled test assertions, dual home-flag conventions, and single-quoted strings in JSON authored here. Resolved via mechanical gates and git rollback to commit 38024b4.",
+  "state": {
+    "tool": "verified at commit 38024b4, full suite passes",
+    "snapshots": "407b92d0 baseline and 216d94a1 latest, integrity verified",
+    "projects": {
+      "api-backend": "open",
+      "auth-service": "dev"
+    },
+    "diff_baseline_to_latest": {
+      "removed": "web-frontend",
+      "added": "auth-service"
+    }
+  },
+  "conventions": [
+    "home-flag is the handover root directory",
+    "snapshots are sha256 of canonical JSON, deduplicated on identical content",
+    "manifest lines contain an iso utc timestamp and the full sha256",
+    "explicit hashes bypass the manifest",
+    "empty manifest fails cleanly with exit code one"
+  ],
+  "deployment_policy": [
+    "never direct-paste payloads over fifty lines, deliver via editor",
+    "parse the deploy script before executing it",
+    "gates: compile check, grep for every expected function, test count, full suite",
+    "backup before deploy, git commit after verified deploy",
+    "never write directly onto the live tool path"
+  ],
+  "key_incidents": [
+    "placeholder heredoc compiled and deployed as a dead tool, proving compile checks are insufficient",
+    "line forty-four test failure was a format mismatch, not a tool bug",
+    "html workbench artifact rejected for incompatible schema and simulated test output",
+    "unsanctioned direct-path deploy rolled back via git checkout",
+    "single-quoted strings in this document caused persistent parse failures, authored incorrectly here"
+  ],
+  "remaining_work": [
+    "validate parse, then snapshot this document",
+    "optionally commit the handover directory to git"
+  ],
+  "projects": {
+    "api-backend": {
+      "state": "open"
+    },
+    "auth-service": {
+      "state": "dev"
+    }
+  }
+}
