@@ -1,21 +1,96 @@
-#!/usr/bin/env bash
-set -euo pipefail
+#!/bin/bash
+# repo-ctl - Operational Tooling Wrapper
+# Version: 1.1 (Integrated Discovery Engine)
 
 MANIFEST="manifest.json"
 
-case "${1:-}" in
-    doctor)
-        echo "[AUDIT] Validating environment integrity..."
-        [ -d "scripts" ] && echo "✅ Scripts directory present" || echo "❌ Scripts missing"
-        [ -f "$MANIFEST" ] && echo "✅ Manifest present" || echo "❌ Manifest missing"
-        
-        # Advanced Parse: Count targets using python3
-        COUNT=$(python3 -c "import json; data=json.load(open('$MANIFEST')); print(len(data) if isinstance(data, list) else 0)")
+show_help() {
+    echo "Usage: ./scripts/repo-ctl [command]"
+    echo "Commands:"
+    echo "  doctor    Audit environment integrity"
+    echo "  --plan    Generate recovery action plan based on manifest"
+    echo "  help      Show this help message"
+}
+
+do_doctor() {
+    echo "[AUDIT] Validating environment integrity..."
+    local fail=0
+    
+    if [ -d "scripts" ]; then echo "✅ Scripts directory present"; else echo "❌ Scripts missing"; fail=1; fi
+    if [ -f "$MANIFEST" ]; then echo "✅ Manifest present"; else echo "❌ Manifest missing"; fail=1; fi
+    
+    if [ -f "$MANIFEST" ]; then
+        COUNT=$(grep -c "path" "$MANIFEST" || echo 0)
         echo "✅ Manifest Target Count: $COUNT"
+    else
+        echo "❌ Cannot count targets: Manifest missing"
+        fail=1
+    fi
+
+    if [ $fail -eq 0 ]; then
         echo "[INFO] Audit complete."
-        ;;
-    *)
-        echo "Usage: repo-ctl {doctor}"
+        return 0
+    else
+        echo "[ERROR] Audit failed."
+        return 1
+    fi
+}
+
+do_plan() {
+    if [ ! -f "$MANIFEST" ]; then
+        echo "ERROR: manifest.json not found. Cannot generate plan."
         exit 1
-        ;;
+    fi
+
+    python3 <<'PY_EOF'
+import json
+import os
+
+def generate_plan():
+    try:
+        with open("manifest.json", "r") as f:
+            manifest = json.load(f)
+        
+        # Handle both list and dict formats
+        targets = manifest if isinstance(manifest, list) else manifest.get("targets", [])
+        
+        print(f"{'TARGET':<40} | {'STATUS':<12} | {'ACTION'}")
+        print("-" * 65)
+        
+        plan_needed = False
+        for item in targets:
+            # Handle both object and string entries in manifest
+            path = item["path"] if isinstance(item, dict) else item
+            
+            if not os.path.exists(path):
+                status = "MISSING"
+                action = "RESTORE"
+                plan_needed = True
+            elif os.path.isfile(path) and not os.access(path, os.X_OK) and "scripts/" in path:
+                status = "NO_EXEC"
+                action = "CHMOD +X"
+                plan_needed = True
+            else:
+                status = "OK"
+                action = "NONE"
+                
+            print(f"{path:<40} | {status:<12} | {action}")
+            
+        if not plan_needed:
+            print("\n[RESULT] No actions required. Environment matches manifest.")
+        else:
+            print("\n[RESULT] Plan generated. Resolve 'RESTORE' and 'CHMOD' actions.")
+
+    except Exception as e:
+        print(f"Plan Error: {e}")
+
+generate_plan()
+PY_EOF
+}
+
+case "$1" in
+    doctor) do_doctor ;;
+    --plan) do_plan ;;
+    help) show_help ;;
+    *) show_help ;;
 esac
