@@ -1,22 +1,27 @@
 [
   {
     "timestamp": "2026-09-11T07:07:28.436361",
-    "hash": "0b4dfdf422e294f9582e87c34b36676a5bd644183cfb03cb20e53a32b20bb136"
+    "hash": "0b4dfdf422e294f9582e87c34b36676a5bd644183cfb03cb20e53a32b20bb136",
+    "path": "scripts/repo-ctl"
   },
   {
     "timestamp": "2026-09-11T07:07:28.436392",
-    "hash": "1a6ff8ae69db63115e72a3afb7440b4e2323f963d3dedb5e0566c680b3f4a9e2"
+    "hash": "1a6ff8ae69db63115e72a3afb7440b4e2323f963d3dedb5e0566c680b3f4a9e2",
+    "path": "manifest.json"
   },
   {
     "timestamp": "2026-09-11T07:07:28.436400",
-    "hash": "216d94a17666ca0a87245dfffa426356249dc25f7de90dc25730f4570cea184d"
+    "hash": "216d94a17666ca0a87245dfffa426356249dc25f7de90dc25730f4570cea184d",
+    "path": "HANDOVER.json"
   },
   {
     "timestamp": "2026-09-11T07:07:28.436416",
-    "hash": "407b92d03f0da82627bfa3d69544ff17340fcb197b7a90597951d42fa9de5d68"
+    "hash": "407b92d03f0da82627bfa3d69544ff17340fcb197b7a90597951d42fa9de5d68",
+    "path": "sync_and_monitor.sh"
   },
   {
     "timestamp": "2026-09-11T07:07:28.436423",
-    "hash": "70f3b3a7baeb7c3737fdebee70b39597a456bc06a9b145e30a25fe84822b9705"
+    "hash": "70f3b3a7baeb7c3737fdebee70b39597a456bc06a9b145e30a25fe84822b9705",
+    "path": "scripts/"
   }
 ]
