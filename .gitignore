@@ -1,8 +1,50 @@
-*.bak
-*.invalid-*
+# ------------------------------------------------------------
+# HANDOVER project - vetted ignore rules (git-wildmatch only)
+# ------------------------------------------------------------
+
+# 1. Snapshots: keep only canonical JSON data
+snapshots/**
+!snapshots/**/
+!snapshots/**/*.json
+
+# 2. Audit logs: retain only dated (YYYY-MM-DD) log files
+#    No global *.log rule anywhere below - it would re-ignore these.
+.audit_logs/*
+!.audit_logs/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]-*
+
+# 3. Editor / compile debris
+**/temp*/
+*~
+*.swp
+*.swo
+*.tmp
+*.o
+*.obj
+*.class
+*.pyc
+*.pyo
 __pycache__/
-# Carter's OPSEC artifacts
+
+# 4. Build tree: ignore everything, keep versioned libraries
+build/**
+!build/**/
+!build/**/*.a
+!build/**/*.so
+!build/**/*.dll
+
+# 5. Environment-specific configs only
+*_dev.yml
+*_prod.yml
+
+# 6. Operational artifacts - never version these
+.opsec_recovery_repo/
 .guardian_audit
 .guardian_check.py
-.audit_logs/
-opsec_recovery_repo/
+.backups/
+
+# Handover backup/damage variants
+HANDOVER.json.bak
+HANDOVER.json.damaged-*
+HANDOVER.json.invalid-*
+HANDOVER.json.pre-*
+snapshot-extension-repair-*.bak
