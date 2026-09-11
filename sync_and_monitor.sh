@@ -1,23 +1,32 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 REPO_DIR="/home/droid/handover"
-MANIFEST="$REPO_DIR/manifest.json"
-
-echo "[INFO] Commencing State Synchronization..." 
 cd "$REPO_DIR"
 
-# Stage manifest and operational tooling
-git add "$MANIFEST" scripts/
+log() { echo "[$(date +'%Y-%m-%dT%H:%M:%S')] $*"; }
 
-# Commit changes if staging area contains modifications
+log "Starting Handover Seal Process..."
+
+# 1. Generate SHA-256 seal including the monitor script
+log "Generating HANDOVER.sha256..."
+sha256sum HANDOVER.json manifest.json scripts/repo-ctl sync_and_monitor.sh monitor_remote.sh > HANDOVER.sha256
+
+# 2. Index Synchronization
+log "Synchronizing Git index..."
+git add HANDOVER.sha256 sync_and_monitor.sh monitor_remote.sh .gitignore
+git add -u
+
+# 3. Conditional Commit
 if ! git diff --cached --quiet; then
-    git commit -m "OPSEC: Sync manifest and harden operational tooling"
+    log "Committing state and seal..."
+    git commit -m "chore(handover): seal state, sync scripts, and add remote monitor"
+else
+    log "No index changes detected. Skipping commit."
 fi
 
-# Push to origin if remote exists
-if git remote get-url origin >/dev/null 2>&1; then
-    git push -u origin "$(git rev-parse --abbrev-ref HEAD)"
-else
-    echo "[WARN] Remote 'origin' is not set. Skipping git push."
-fi
+# 4. Upstream Synchronization
+log "Pushing committed state to origin/main..."
+git push origin main
+
+log "Handover successfully sealed, pushed, and monitor deployed."
