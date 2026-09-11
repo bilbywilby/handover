@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+MANIFEST="manifest.json"
+
+case "${1:-}" in
+    doctor)
+        echo "[AUDIT] Validating environment integrity..."
+        [ -d "scripts" ] && echo "✅ Scripts directory present" || echo "❌ Scripts missing"
+        [ -f "$MANIFEST" ] && echo "✅ Manifest present" || echo "❌ Manifest missing"
+        
+        # Advanced Parse: Count targets using python3
+        COUNT=$(python3 -c "import json; data=json.load(open('$MANIFEST')); print(len(data) if isinstance(data, list) else 0)")
+        echo "✅ Manifest Target Count: $COUNT"
+        echo "[INFO] Audit complete."
+        ;;
+    *)
+        echo "Usage: repo-ctl {doctor}"
+        exit 1
+        ;;
+esac
