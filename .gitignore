@@ -1,3 +1,8 @@
 *.bak
 *.invalid-*
 __pycache__/
+# Carter's OPSEC artifacts
+.guardian_audit
+.guardian_check.py
+.audit_logs/
+opsec_recovery_repo/
